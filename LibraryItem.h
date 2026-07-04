@@ -49,7 +49,7 @@ public:
     }
 
     virtual ~LibraryItem() {}
-    virtual void show() = 0;
+    virtual void show() = 0; // pure virtual function để buộc các lớp con phải triển khai phương thức show() để hiển thị thông tin tài liệu
 };
 
 class Book : public LibraryItem
@@ -57,7 +57,7 @@ class Book : public LibraryItem
 public:
     string tacGia;
 
-    Book(string id, string ten, string tacGia, int copies = 1) : LibraryItem(id, ten, copies)
+    Book(string id, string ten, string tacGia, int copies = 1) : LibraryItem(id, ten, copies) // gọi constructor của lớp cha LibraryItem để khởi tạo id, ten và số bản sao
     {
         this->tacGia = tacGia;
     }
@@ -99,5 +99,6 @@ public:
         cout << left << setw(12) << "DVD" << "| " << setw(8) << id << "| " << setw(30) << ten << "| " << setw(25) << (string("Thoi luong: ") + to_string(thoiLuong) + string(" phut")) << "| " << setw(10) << totalCopies << "| " << setw(6) << availableCopies << endl;
     }
 };
+
 
 #endif
