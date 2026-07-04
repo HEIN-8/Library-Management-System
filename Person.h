@@ -1,4 +1,4 @@
-#ifndef PERSON_H 
+#ifndef PERSON_H
 #define PERSON_H
 
 #include <iostream>
@@ -53,14 +53,14 @@ class Librarian : public Person
 public:
     string maNhanVien;
 
-    Librarian(string id, string name, string mssv, string maNV) : Person(id, name, mssv)
+    Librarian(string id, string name, string maNV) : Person(id, name, "")
     {
         maNhanVien = maNV;
     }
 
     void show()
     {
-        cout << left << setw(8) << id << "| " << setw(25) << name << "| " << setw(15) << mssv << "| " << setw(10) << maNhanVien << endl;
+        cout << left << setw(8) << id << "| " << setw(25) << name << "| " << setw(10) << maNhanVien << endl;
     }
 };
 

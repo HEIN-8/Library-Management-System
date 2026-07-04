@@ -14,8 +14,8 @@ using namespace std;
 class Library
 {
 private:
-    vector<LibraryItem *> danhSachTaiLieu;
-    vector<SinhVien *> danhSachSinhVien;
+    vector<LibraryItem *> danhSachTaiLieu; // khai báo một vector con trỏ danh sách các đối tượng LibraryItem
+    vector<SinhVien *> danhSachSinhVien; 
     vector<Librarian *> danhSachThuThu;
     vector<Loan *> danhSachPhieuMuon;
     int ngayHienTai;
@@ -28,32 +28,17 @@ public:
         demSoPhieu = 1;
     }
 
-    void themSach(string id, string ten, string tacGia)
-    {
-        danhSachTaiLieu.push_back(new Book(id, ten, tacGia, 1));
-    }
-
-    void themTapChi(string id, string ten, int soPH)
-    {
-        danhSachTaiLieu.push_back(new Magazine(id, ten, soPH, 1));
-    }
-
-    void themDVD(string id, string ten, int phut)
-    {
-        danhSachTaiLieu.push_back(new DVD(id, ten, phut, 1));
-    }
-
-    void themSach(string id, string ten, string tacGia, int copies)
+    void themSach(string id, string ten, string tacGia, int copies = 1)
     {
         danhSachTaiLieu.push_back(new Book(id, ten, tacGia, copies));
     }
 
-    void themTapChi(string id, string ten, int soPH, int copies)
+    void themTapChi(string id, string ten, int soPH, int copies = 1)
     {
         danhSachTaiLieu.push_back(new Magazine(id, ten, soPH, copies));
     }
 
-    void themDVD(string id, string ten, int phut, int copies)
+    void themDVD(string id, string ten, int phut, int copies = 1)
     {
         danhSachTaiLieu.push_back(new DVD(id, ten, phut, copies));
     }
@@ -63,27 +48,27 @@ public:
         danhSachSinhVien.push_back(new SinhVien(id, ten, mssv));
     }
 
-    void themThuThu(string id, string ten, string mssv, string maNV)
+    void themThuThu(string id, string ten, string maNV)
     {
-        Librarian *l = new Librarian(id, ten, mssv, maNV);
+        Librarian *l = new Librarian(id, ten, maNV);
         // password mặc định = maNV
         l->setPassword(maNV);
         danhSachThuThu.push_back(l);
     }
 
     // tự động tạo id mới theo dạng SVxx
-    string dangKySinhVien(string ten, string password)
+    string dangKySinhVien(string ten, string mssv, string password)
     {
-        int maxNum = 0;
-        for (auto s : danhSachSinhVien)
+        int maxNum = 0; // biến maxNum để lưu số lớn nhất được tìm thấy trong các id hiện có của sinh viên
+        for (auto s : danhSachSinhVien) // vòng lặp for-each để duyệt qua từng sinh viên trong danh sách danhSachSinhVien
         {
-            string sid = s->getId();
-            if (sid.size() > 2 && sid.substr(0, 2) == "SV")
+            string sid = s->getId(); // lấy id của sinh viên hiện tại trong danh sách
+            if (sid.size() > 2 && sid.substr(0, 2) == "SV") // để đảm bảo rằng chuỗi id có ít nhất 3 ký tự và bắt đầu bằng "SV"
             {
                 try
                 {
-                    int v = stoi(sid.substr(2));
-                    if (v > maxNum)
+                    int v = stoi(sid.substr(2)); // stoi chuyển đổi chuỗi thành số nguyên, bắt đầu từ ký tự thứ 3 của chuỗi id
+                    if (v > maxNum) // v là số lớn nhất trong các id hiện có, maxNum là số lớn nhất được tìm thấy cho đến thời điểm hiện tại
                         maxNum = v;
                 }
                 catch (...)
@@ -94,13 +79,13 @@ public:
         int newNum = maxNum + 1;
         char buf[10];
         if (newNum < 10)
-            sprintf(buf, "SV0%d", newNum);
+            sprintf(buf, "SV0%d", newNum); // sprintf chuyển đổi số thành chuỗi và lưu vào buf
         else
             sprintf(buf, "SV%d", newNum);
-        string newId = string(buf);
-        SinhVien *sv = new SinhVien(newId, ten, "");
+        string newId = string(buf); 
+        SinhVien *sv = new SinhVien(newId, ten, mssv);
         sv->setPassword(password);
-        danhSachSinhVien.push_back(sv);
+        danhSachSinhVien.push_back(sv); // thêm sinh viên mới vào danh sách cùng với id mới được tạo, tên, mssv và mật khẩu
         return newId;
     }
 
@@ -111,7 +96,7 @@ public:
             if (s->getId() == id && s->getPassword() == password)
             {
                 isLibrarian = false;
-                return 1;
+                return 1; // trả về cho res(result) ở main
             }
         }
         for (auto l : danhSachThuThu)
@@ -122,7 +107,7 @@ public:
                 return 2;
             }
         }
-        return 0;
+        return 0; // thất bại
     }
 
     // 2 hàm tìm kiếm theo id và tên
@@ -183,7 +168,7 @@ public:
         {
             if (danhSachTaiLieu[i]->getId() == id)
             {
-                Book *b = dynamic_cast<Book *>(danhSachTaiLieu[i]);
+                Book *b = dynamic_cast<Book *>(danhSachTaiLieu[i]); // dynamic_cast để kiểm tra xem đối tượng có phải là một đối tượng của lớp con Book hay không
                 if (b)
                 {
                     string tacgia = b->tacGia;
@@ -222,7 +207,7 @@ public:
         bool found = false;
         for (auto i = danhSachTaiLieu.begin(); i != danhSachTaiLieu.end(); ++i)
         {
-            Book *b = dynamic_cast<Book *>(*i);
+            Book *b = dynamic_cast<Book *>(*i); 
             if (b)
             {
                 found = true;

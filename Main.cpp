@@ -20,7 +20,7 @@ void nhapDuLieuMau(Library &lib)
     lib.themSinhVien("SV01", "Pham Huy", "123456789012");
     lib.themSinhVien("SV02", "Tuyet Nhu", "234567890123");
 
-    lib.themThuThu("LIB01", "Hoang Van Thu Thu", "0900000000", "TT001"); // password = TT001
+    lib.themThuThu("LIB01", "Hoang Van Thu Thu", "TT001"); // password = TT001
 }
 
 void inMenu(bool showSinhVien = true)
@@ -39,7 +39,7 @@ int main()
 {
     Library lib;
     nhapDuLieuMau(lib);
-    string currentUser = "";
+    string currentUser = ""; // lưu id của người dùng hiện tại (sinh viên hoặc thủ thư)
     bool isLibrarian = false;
     bool loggedIn = false;
 
@@ -56,13 +56,15 @@ int main()
             cin >> c;
             if (c == 1)
             {
-                string name, pw;
+                string name, mssv, pw;
                 cout << "Nhap ten: ";
                 cin.ignore();
                 getline(cin, name);
+                cout << "Nhap MSSV(12 so): ";
+                cin >> mssv;
                 cout << "Dat mat khau: ";
                 cin >> pw;
-                string newId = lib.dangKySinhVien(name, pw);
+                string newId = lib.dangKySinhVien(name, mssv, pw);
                 if (!newId.empty())
                 {
                     cout << "\nDang ky thanh cong. id cua ban la " << newId << endl;
@@ -80,9 +82,9 @@ int main()
                 cin >> id;
                 cout << "Nhap mat khau: ";
                 cin >> pw;
-                bool tmpIsLib = false;
+                bool tmpIsLib = false; // biến tạm để lưu vai trò của người dùng sau khi đăng nhập
                 int res = lib.dangNhap(id, pw, tmpIsLib);
-                if (res == 0)
+                if (res == 0) // kiểm tra kết quả ở hàm dangNhap của file Library.h, 1 và 2 là thành công
                     cout << "Dang nhap that bai" << endl;
                 else
                 {
